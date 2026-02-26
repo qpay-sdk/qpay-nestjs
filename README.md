@@ -1,5 +1,8 @@
 # @qpay-sdk/nestjs
 
+[![npm](https://img.shields.io/npm/v/@qpay-sdk/nestjs)](https://www.npmjs.com/package/@qpay-sdk/nestjs)
+[![CI](https://github.com/qpay-sdk/qpay-nestjs/actions/workflows/ci.yml/badge.svg)](https://github.com/qpay-sdk/qpay-nestjs/actions)
+
 QPay V2 payment module for NestJS.
 
 ## Install
