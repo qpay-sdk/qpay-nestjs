@@ -1,30 +1,27 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import { Controller, Get, Query, Header } from '@nestjs/common';
 import { QPayService } from './qpay.service';
 
 @Controller('qpay')
 export class QPayWebhookController {
   constructor(private readonly qpayService: QPayService) {}
 
-  @Post('webhook')
-  @HttpCode(200)
-  async handleWebhook(@Body() body: { invoice_id?: string }) {
-    const invoiceId = body.invoice_id;
-    if (!invoiceId) {
-      return { error: 'Missing invoice_id' };
+  @Get('webhook')
+  @Header('Content-Type', 'text/plain')
+  async handleWebhook(
+    @Query('qpay_payment_id') paymentId?: string,
+  ): Promise<string> {
+    if (!paymentId) {
+      return 'ERROR: Missing qpay_payment_id';
     }
 
     try {
-      const result = await this.qpayService.checkPayment({
+      await this.qpayService.checkPayment({
         objectType: 'INVOICE',
-        objectId: invoiceId,
+        objectId: paymentId,
       });
-
-      if (result.rows && result.rows.length > 0) {
-        return { status: 'paid', invoiceId };
-      }
-      return { status: 'unpaid', invoiceId };
-    } catch (err: any) {
-      return { error: err.message };
+      return 'SUCCESS';
+    } catch {
+      return 'SUCCESS';
     }
   }
 }
